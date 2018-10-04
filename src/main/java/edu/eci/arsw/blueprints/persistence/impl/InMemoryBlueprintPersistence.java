@@ -12,15 +12,18 @@ import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.BlueprintsPersistence;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author hcadavid
  */
+@Service
 public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
 
     private final Map<Tuple<String,String>,Blueprint> blueprints=new HashMap<>();
-
+    
     public InMemoryBlueprintPersistence() {
         //load stub data
         Point[] pts=new Point[]{new Point(140, 140),new Point(115, 115)};
@@ -28,7 +31,10 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
         blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);
         
     }    
-    
+    @Override
+    public void addNewBlueprint(Blueprint bp) throws BlueprintNotFoundException {
+        blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);
+    }
     @Override
     public void saveBlueprint(Blueprint bp) throws BlueprintPersistenceException {
         if (blueprints.containsKey(new Tuple<>(bp.getAuthor(),bp.getName()))){
@@ -38,12 +44,20 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
             blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);
         }        
     }
-
+   
     @Override
     public Blueprint getBlueprint(String author, String bprintname) throws BlueprintNotFoundException {
         return blueprints.get(new Tuple<>(author, bprintname));
     }
+    @Override
+    public Set<Blueprint> getBlueprintsbyAuthor(String author) throws BlueprintNotFoundException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    @Override
+    public Set<Blueprint> getAllBlueprints() throws BlueprintNotFoundException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     
-    
+
 }
