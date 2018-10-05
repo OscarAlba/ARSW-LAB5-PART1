@@ -10,7 +10,9 @@ import edu.eci.arsw.blueprints.model.Point;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.BlueprintsPersistence;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.stereotype.Service;
@@ -26,15 +28,12 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
     
     public InMemoryBlueprintPersistence() {
         //load stub data
-        Point[] pts=new Point[]{new Point(140, 140),new Point(115, 115)};
-        Blueprint bp=new Blueprint("_authorname_", "_bpname_ ",pts);
-        blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);
+//        Point[] pts=new Point[]{new Point(140, 140),new Point(115, 115)};
+//        Blueprint bp=new Blueprint("_authorname_", "_bpname_ ",pts);
+//        blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);
         
     }    
-    @Override
-    public void addNewBlueprint(Blueprint bp) throws BlueprintNotFoundException {
-        blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);
-    }
+
     @Override
     public void saveBlueprint(Blueprint bp) throws BlueprintPersistenceException {
         if (blueprints.containsKey(new Tuple<>(bp.getAuthor(),bp.getName()))){
@@ -49,13 +48,28 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
     public Blueprint getBlueprint(String author, String bprintname) throws BlueprintNotFoundException {
         return blueprints.get(new Tuple<>(author, bprintname));
     }
+    
     @Override
     public Set<Blueprint> getBlueprintsbyAuthor(String author) throws BlueprintNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         Collection<Blueprint> values = blueprints.values();
+         Set<Blueprint> authorBlueprints = new HashSet<>();
+          for (Blueprint i: values) {
+                if(i.getAuthor().equals(author)){
+                    authorBlueprints.add(i);
+                }
+           }
+          
+        return authorBlueprints;
     }
+    
     @Override
     public Set<Blueprint> getAllBlueprints() throws BlueprintNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Collection<Blueprint> allValues = blueprints.values();
+         Set<Blueprint> allBlueprints = new HashSet<>();
+         allValues.forEach((i) -> {
+             allBlueprints.add(i);
+        });
+        return allBlueprints;
     }
 
     

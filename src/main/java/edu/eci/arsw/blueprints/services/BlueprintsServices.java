@@ -27,8 +27,8 @@ public class BlueprintsServices {
     BlueprintsPersistence bpp=null;
     
     
-    public void addNewBlueprint(Blueprint bp) throws BlueprintNotFoundException{
-        bpp.addNewBlueprint(bp);
+    public void addNewBlueprint(Blueprint bp) throws BlueprintPersistenceException{
+        bpp.saveBlueprint(bp);
     }
     
     public Set<Blueprint> getAllBlueprints() throws BlueprintNotFoundException{

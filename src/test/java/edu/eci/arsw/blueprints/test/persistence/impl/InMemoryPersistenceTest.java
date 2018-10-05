@@ -64,11 +64,76 @@ public class InMemoryPersistenceTest {
         }
         catch (BlueprintPersistenceException ex){
             
-        }
-                
-        
+        }    
     }
 
+    @Test
+    public void getBluepointbyAuthorTest() throws BlueprintPersistenceException, BlueprintNotFoundException{
+        
+        InMemoryBlueprintPersistence ibpp=new InMemoryBlueprintPersistence();
+        Point[] pts0=new Point[]{new Point(40, 40),new Point(15, 15)};
+        Blueprint bp0=new Blueprint("mack", "mypaint",pts0);
+        
+        ibpp.saveBlueprint(bp0);
+        
+        Point[] pts=new Point[]{new Point(0, 0),new Point(10, 10)};
+        Blueprint bp=new Blueprint("john", "thepaint",pts);
 
+        ibpp.saveBlueprint(bp);
+        
+        Point[] pts1=new Point[]{new Point(0, 0),new Point(15, 15)};
+        Blueprint bp1=new Blueprint("john", "wall",pts);
+
+        ibpp.saveBlueprint(bp1);
+        
+        System.out.println(ibpp.getBlueprintsbyAuthor("john").toString());
+
+        
+        assertEquals(2,ibpp.getBlueprintsbyAuthor("john").size());
+    }
     
+    @Test
+    public void getAllBluepointTest() throws BlueprintPersistenceException, BlueprintNotFoundException{
+        
+        //First 
+        InMemoryBlueprintPersistence ibpp=new InMemoryBlueprintPersistence();
+        
+        Point[] pts0=new Point[]{new Point(40, 40),new Point(15, 15)};
+        Blueprint bp0=new Blueprint("mack", "mypaint",pts0);
+        
+        ibpp.saveBlueprint(bp0);
+        
+        Point[] pts=new Point[]{new Point(0, 0),new Point(10, 10)};
+        Blueprint bp=new Blueprint("john", "thepaint",pts);
+
+        ibpp.saveBlueprint(bp);
+        
+        Point[] pts1=new Point[]{new Point(0, 0),new Point(15, 15)};
+        Blueprint bp1=new Blueprint("john", "wall",pts);
+
+        ibpp.saveBlueprint(bp1);
+        
+        System.out.println(ibpp.getAllBlueprints().toString());
+
+        
+        assertEquals(3,ibpp.getAllBlueprints().size());
+    }
+    
+     @Test
+    public void getBluepointTest() throws BlueprintPersistenceException, BlueprintNotFoundException{
+        
+        //First 
+        InMemoryBlueprintPersistence ibpp=new InMemoryBlueprintPersistence();
+        
+        Point[] pts0=new Point[]{new Point(40, 40),new Point(15, 15)};
+        Blueprint bp0=new Blueprint("mack", "mypaint",pts0);
+        
+        ibpp.saveBlueprint(bp0);
+        
+        
+        System.out.println(ibpp.getBlueprint("mack", "mypaint").toString());
+   
+        assertEquals(null,ibpp.getBlueprint("dario", "maria"));
+
+    }
 }
