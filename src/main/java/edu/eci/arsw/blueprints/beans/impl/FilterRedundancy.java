@@ -19,8 +19,9 @@ import edu.eci.arsw.blueprints.model.Blueprint;
 public class FilterRedundancy implements FilterPoint{
 
     @Override
-    public void removePoints(Blueprint bp) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Blueprint removePoints(Blueprint bp) {
+        bp.getPoints();
+        return null;
     }
     
     

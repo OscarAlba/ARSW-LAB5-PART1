@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 public class BlueprintsServices {
    
     @Autowired
-    BlueprintsPersistence bpp=null;
+    BlueprintsPersistence bpp ;
     
     @Autowired
     FilterPoint fp;

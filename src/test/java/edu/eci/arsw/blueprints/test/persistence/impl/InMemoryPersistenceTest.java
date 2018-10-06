@@ -10,6 +10,7 @@ import edu.eci.arsw.blueprints.model.Point;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.impl.InMemoryBlueprintPersistence;
+import edu.eci.arsw.blueprints.services.BlueprintsServices;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
@@ -136,4 +137,6 @@ public class InMemoryPersistenceTest {
         assertEquals(null,ibpp.getBlueprint("dario", "maria"));
 
     }
+    
+ 
 }

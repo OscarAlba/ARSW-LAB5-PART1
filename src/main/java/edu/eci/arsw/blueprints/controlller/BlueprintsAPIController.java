@@ -4,10 +4,13 @@
  * and open the template in the editor.
  */
 package edu.eci.arsw.blueprints.controlller;
+import edu.eci.arsw.blueprints.model.Blueprint;
+import edu.eci.arsw.blueprints.model.Point;
+import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
+import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.services.BlueprintsServices;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -33,47 +36,40 @@ public class BlueprintsAPIController {
     
     @Autowired
     BlueprintsServices blueprint;
-
+    
+  
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> getOrders() {
+    public ResponseEntity<?> getAllBluePrints() throws BlueprintNotFoundException {
         
-     
-        return new ResponseEntity<>("*/", HttpStatus.OK);
+        return new ResponseEntity<>(blueprint.getAllBlueprints(), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{id}")
-    public ResponseEntity<?> getOrderByTable(@PathVariable("id") int id) {
+    @RequestMapping(method = RequestMethod.GET, path = "/{author}")
+    public ResponseEntity<?> getBluePrintsbyAuthor(@PathVariable("author") String author) throws BlueprintNotFoundException {
 
-        
-
-        return new ResponseEntity<>("*/", HttpStatus.OK);
+        return new ResponseEntity<>(blueprint.getBlueprintsByAuthor(author), HttpStatus.OK);
     }
+    @RequestMapping(method = RequestMethod.GET, path = "/{author}/{name}")
+    public ResponseEntity<?> getBluePrint(@PathVariable("author") String author,@PathVariable("name") String name) throws BlueprintNotFoundException {
 
-//    @RequestMapping(method = RequestMethod.POST)
-//    public ResponseEntity<?> postOrder(@RequestBody Map<Integer, > order) {
-//        try {
-//            Set<Integer> tables = order.keySet();
-//
-//            for (Integer s : tables) {
-//
-//                restaurant.addNewOrderToTable(order.get(s));
-//            }
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (OrderServicesException ex) {
-//            Logger.getLogger(OrdersAPIController.class.getName()).log(Level.SEVERE, null, ex);
-//            return new ResponseEntity<>(ex.toString(), HttpStatus.METHOD_NOT_ALLOWED);
-//        }
-//    }
-
-//    @RequestMapping(method = RequestMethod.GET, path = "/{idTable}/total")
-//    public ResponseEntity<?> getTotalTableBill(@PathVariable int idTable) {
-//        try {
-//            return new ResponseEntity<>(restaurant.calculateTableBill(idTable), HttpStatus.OK);
-//        } catch (OrderServicesException ex) {
-//            Logger.getLogger(OrdersAPIController.class.getName()).log(Level.SEVERE, null, ex);
-//            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-//        }
-//    }
+        return new ResponseEntity<>(blueprint.getBlueprint(author,name), HttpStatus.OK);
+    }
+    
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<?> postBlueprint(@RequestBody Map<String,String> bp) throws BlueprintPersistenceException {
+            
+            Blueprint bp0 = new Blueprint();
+        
+            if(bp.get("points") == null && bp.get("author")!= null && bp.get("name")!=null){
+                bp0 = new Blueprint(bp.get("author"), bp.get("name"));
+            }else if(bp.get("points") != null){
+                System.out.println(bp.get("points"));
+                bp0 = new Blueprint(bp.get("author"), bp.get("name"),new Point[]{new Point(40, 40),new Point(15, 15)});
+            }
+            blueprint.addNewBlueprint(bp0);
+            return new ResponseEntity<>(HttpStatus.OK); 
+    }
+    
     
 //    @RequestMapping(method = RequestMethod.PUT,path="/{idTable}")
 //    public ResponseEntity<?> updateOrder(@PathVariable int idTable,@RequestBody Map<String, Integer> dish) {
