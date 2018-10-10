@@ -15,5 +15,5 @@ import edu.eci.arsw.blueprints.model.Blueprint;
 public interface FilterPoint {
     
     
-    public Blueprint removePoints(Blueprint bp);
+    public void removePoints(Blueprint bp);
 }

@@ -15,9 +15,9 @@ import org.springframework.boot.SpringApplication;
  */
 
 @SpringBootApplication
-public class RestAPIApplication {
+public class BlueprintAPIController {
 
     public static void main(String[] args) {
-        SpringApplication.run(RestAPIApplication.class, args);
+        SpringApplication.run(BlueprintAPIController.class, args);
     }
 }

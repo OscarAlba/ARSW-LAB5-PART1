@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package edu.eci.arsw.blueprints.controlller;
+import edu.eci.arsw.blueprints.BlueprintAPIController;
 import edu.eci.arsw.blueprints.model.Blueprint;
 import edu.eci.arsw.blueprints.model.Point;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
@@ -39,28 +40,50 @@ public class BlueprintsAPIController {
     
   
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> getAllBluePrints() throws BlueprintNotFoundException {
+    public ResponseEntity<?> getAllBluePrints() {
+        try {
+            return new ResponseEntity<>(blueprint.getAllBlueprints(), HttpStatus.OK);
+        } catch (BlueprintNotFoundException ex) {
+            Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("There are no blueprints",HttpStatus.NOT_FOUND);
+        }
         
-        return new ResponseEntity<>(blueprint.getAllBlueprints(), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{author}")
-    public ResponseEntity<?> getBluePrintsbyAuthor(@PathVariable("author") String author) throws BlueprintNotFoundException {
-
-        return new ResponseEntity<>(blueprint.getBlueprintsByAuthor(author), HttpStatus.OK);
+    public ResponseEntity<?> getBluePrintsbyAuthor(@PathVariable("author") String author)  {
+        
+        try {
+            return new ResponseEntity<>(blueprint.getBlueprintsByAuthor(author), HttpStatus.OK);
+        } catch (BlueprintNotFoundException ex) {
+            Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("There are no blueprints",HttpStatus.NOT_FOUND);
+        }
+        
     }
+    
+    
+    
+    
     @RequestMapping(method = RequestMethod.GET, path = "/{author}/{name}")
-    public ResponseEntity<?> getBluePrint(@PathVariable("author") String author,@PathVariable("name") String name) throws BlueprintNotFoundException {
-
-        return new ResponseEntity<>(blueprint.getBlueprint(author,name), HttpStatus.OK);
+    public ResponseEntity<?> getBluePrint(@PathVariable("author") String author,@PathVariable("name") String name) {
+        
+        
+        try {
+            return new ResponseEntity<>(blueprint.getBlueprint(author,name), HttpStatus.OK);
+        } catch (BlueprintNotFoundException ex) {
+            Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("There are no blueprints",HttpStatus.NOT_FOUND);
+        }
+        
     }
     
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> postBlueprint(@RequestBody Map<String,String> bp) throws BlueprintPersistenceException {
+    public ResponseEntity<?> postBlueprint(@RequestBody Map<String,String> bp){
             
             Blueprint bp0 = new Blueprint();
-        
-            if(bp.get("points") == null && bp.get("author")!= null && bp.get("name")!=null){
+             try {
+                 if(bp.get("points") == null && bp.get("author")!= null && bp.get("name")!=null){
                 bp0 = new Blueprint(bp.get("author"), bp.get("name"));
             }else if(bp.get("points") != null){
                 System.out.println(bp.get("points"));
@@ -68,6 +91,11 @@ public class BlueprintsAPIController {
             }
             blueprint.addNewBlueprint(bp0);
             return new ResponseEntity<>(HttpStatus.OK); 
+        } catch (BlueprintPersistenceException ex) {
+            Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ResponseEntity<>("Error modifying the "+bp.get("name")+" blueprint of the author "+bp.get("author"), HttpStatus.FORBIDDEN);
+        }
+            
     }
     
     

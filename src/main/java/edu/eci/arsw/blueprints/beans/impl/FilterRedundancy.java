@@ -8,6 +8,8 @@ package edu.eci.arsw.blueprints.beans.impl;
 import org.springframework.stereotype.Service;
 import edu.eci.arsw.blueprints.beans.FilterPoint;
 import edu.eci.arsw.blueprints.model.Blueprint;
+import edu.eci.arsw.blueprints.model.Point;
+import java.util.List;
 
 /**
  *
@@ -19,11 +21,17 @@ import edu.eci.arsw.blueprints.model.Blueprint;
 public class FilterRedundancy implements FilterPoint{
 
     @Override
-    public Blueprint removePoints(Blueprint bp) {
-        bp.getPoints();
-        return null;
+    public void removePoints(Blueprint bp) {
+            
+        List<Point> points = bp.getPoints();
+        for (int i=0;i<points.size();i++) {
+               if(points.get(i).getX()== points.get(i+1).getX() &&
+                     points.get(i).getY()== points.get(i+1).getY()  
+                       ){
+                   points.remove(points.get(i));
+               }
+           }
+        bp.setPoints(points);
     }
-    
-    
     
 }
